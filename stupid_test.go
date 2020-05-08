@@ -3,6 +3,7 @@ package stupidmux
 import (
 	"fmt"
 	"github.com/stretchr/testify/suite"
+	"github.com/3Xpl0it3r/stupidmux/context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -20,21 +21,21 @@ func(suite *TestStupidMuxSuite)TestStupidMux1(){
 	v1 := mux.Group("/v1")
 	v2 := mux.Group("/v2")
 
-	v1.GET("/", func(ctx *Context) {
+	v1.GET("/", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "HelloWorld")
 	})
-	v1.GET("/foo", func(ctx *Context) {
+	v1.GET("/foo", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "index")
 	})
 
-	v1.GET("/foo/:name", func(ctx *Context) {
-		ctx.String(http.StatusOK, fmt.Sprintf("name:%s", ctx.Params("name")))
+	v1.GET("/foo/:name", func(ctx *context.Context) {
+		ctx.String(http.StatusOK, fmt.Sprintf("name:%s", ctx.ParamByKey("name")))
 	})
-	v2.GET("/static", func(ctx *Context) {
+	v2.GET("/static", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "static")
 	})
-	v2.GET("/static/:type", func(ctx *Context) {
-		ctx.String(http.StatusOK, fmt.Sprintf("type:%s", ctx.Params("type")))
+	v2.GET("/static/:type", func(ctx *context.Context) {
+		ctx.String(http.StatusOK, fmt.Sprintf("type:%s", ctx.ParamByKey("type")))
 	})
 	reqUrl := map[string]string{"/v1/":"HelloWorld", "/v1/foo": "index", "/v1/foo/java": "name:java",
 		"/v2/static/javascript": "type:javascript"}
@@ -55,21 +56,21 @@ func(suite *TestStupidMuxSuite)TestStupidMux2(){
 	v1 := Group("/v1")
 	v2 := Group("/v2")
 
-	v1.GET("/", func(ctx *Context) {
+	v1.GET("/", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "HelloWorld")
 	})
-	v1.GET("/foo", func(ctx *Context) {
+	v1.GET("/foo", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "index")
 	})
 
-	v1.GET("/foo/:name", func(ctx *Context) {
-		ctx.String(http.StatusOK, fmt.Sprintf("name:%s", ctx.Params("name")))
+	v1.GET("/foo/:name", func(ctx *context.Context) {
+		ctx.String(http.StatusOK, fmt.Sprintf("name:%s", ctx.ParamByKey("name")))
 	})
-	v2.GET("/static", func(ctx *Context) {
+	v2.GET("/static", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "static")
 	})
-	v2.GET("/static/:type", func(ctx *Context) {
-		ctx.String(http.StatusOK, fmt.Sprintf("type:%s", ctx.Params("type")))
+	v2.GET("/static/:type", func(ctx *context.Context) {
+		ctx.String(http.StatusOK, fmt.Sprintf("type:%s", ctx.ParamByKey("type")))
 	})
 	reqUrl := map[string]string{"/v1/":"HelloWorld", "/v1/foo": "index", "/v1/foo/java": "name:java",
 		"/v2/static/javascript": "type:javascript"}

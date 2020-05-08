@@ -1,4 +1,4 @@
-module l0calh0st.cn/stupidmux
+module github.com/3Xpl0it3r/stupidmux
 
 go 1.14
 

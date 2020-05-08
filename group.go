@@ -1,9 +1,10 @@
 package stupidmux
 
+import "github.com/3Xpl0it3r/stupidmux/context"
 
 type routerGroup struct {
 	//middlewares
-	middleWares []StupidHandler
+	middleWares []context.StupidHandler
 	//
 	prefix string
 	parent *routerGroup
@@ -37,7 +38,7 @@ func(group *routerGroup)Group(prefix string)*routerGroup{
 	return newGroup
 }
 
-func(group *routerGroup)addRoute(method, comps string, handler StupidHandler){
+func(group *routerGroup)addRoute(method, comps string, handler context.StupidHandler){
 	var path string = ""
 	var curGroup = group
 	for  {
@@ -51,19 +52,19 @@ func(group *routerGroup)addRoute(method, comps string, handler StupidHandler){
 	group.stupidMux.router.addRouter(method, path+ comps, handler)
 }
 
-func(group *routerGroup)GET(subPattern string, handler StupidHandler){
+func(group *routerGroup)GET(subPattern string, handler context.StupidHandler){
 	group.addRoute("GET", subPattern, handler)
 }
 
-func(group *routerGroup)POST(subPattern string,handler StupidHandler){
+func(group *routerGroup)POST(subPattern string,handler context.StupidHandler){
 	group.addRoute("POST", subPattern, handler)
 }
 
-func(group *routerGroup)DELETE(subPattern string, handler StupidHandler){
+func(group *routerGroup)DELETE(subPattern string, handler context.StupidHandler){
 	group.addRoute("DELETE", subPattern, handler)
 }
 
 // middleWares
-func(group *routerGroup)Use(middleWares ...StupidHandler){
+func(group *routerGroup)Use(middleWares ...context.StupidHandler){
 	group.middleWares = append(group.middleWares, middleWares...)
 }

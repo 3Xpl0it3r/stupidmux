@@ -1,23 +1,24 @@
 package stupidmux
 
 import (
+	"github.com/3Xpl0it3r/stupidmux/context"
 	"net/http"
 	"strings"
 )
 
 type router struct {
-	handlers map[string]StupidHandler
+	handlers map[string]context.StupidHandler
 	roots map[string]*node
 }
 
 func newRouter()*router{
 	return &router{
-		handlers: make(map[string]StupidHandler, 0),
+		handlers: make(map[string]context.StupidHandler, 0),
 		roots:    make(map[string]*node, 0),
 	}
 }
 
-func (r *router)addRouter(method, pattern string, handler StupidHandler){
+func (r *router)addRouter(method, pattern string, handler context.StupidHandler){
 	r.handlers[routerKey(method, pattern)] = handler
 	if _,ok := r.roots[method];!ok{
 		r.roots[method] = &node{}
@@ -25,8 +26,8 @@ func (r *router)addRouter(method, pattern string, handler StupidHandler){
 	r.roots[method].insertChild(parsePath(pattern), pattern)
 }
 
-func(r *router)getRouter(method,path string)(*node, Params){
-	var params = make(Params, 0)
+func(r *router)getRouter(method,path string)(*node, context.Params){
+	var params = make(context.Params, 0)
 	if _,ok := r.roots[method];!ok {
 		return nil, nil
 	}
@@ -45,11 +46,11 @@ func(r *router)getRouter(method,path string)(*node, Params){
 	return n, params
 }
 
-func(r *router)handle(ctx *Context){
-	n,params := r.getRouter(ctx.method, ctx.path)
+func(r *router)handle(ctx *context.Context){
+	n,params := r.getRouter(ctx.Method, ctx.Path)
 	if n != nil {
-		if handle,ok := r.handlers[routerKey(ctx.method, n.pattern)];ok {
-			ctx.params = params
+		if handle,ok := r.handlers[routerKey(ctx.Method, n.pattern)];ok {
+			ctx.Params = params
 			handle(ctx)
 		}
 	} else {
