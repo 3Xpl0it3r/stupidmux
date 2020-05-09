@@ -52,15 +52,13 @@ func(mux *StupidMux)Run(address string)error{
 }
 
 func(mux *StupidMux)ServeHTTP(w http.ResponseWriter,r *http.Request){
-	var middleWares []context.StupidHandler
+	c := context.NewContext(w, r)
 	for _,group := range mux.groups{
 		if strings.HasPrefix(r.URL.Path, group.prefix) {
-			middleWares = append(middleWares, group.middleWares...)
+			c.MiddleWares = append(c.MiddleWares, group.middleWares...)
 		}
 	}
-	c := context.NewContext(w, r)
-	c.MiddleWares = middleWares
-	mux.router.handle(context.NewContext(w, r))
+	mux.router.handle(c)
 }
 
 

@@ -2,6 +2,7 @@ package stupidmux
 
 import (
 	"fmt"
+	"github.com/3Xpl0it3r/stupidmux/middeware"
 	"github.com/stretchr/testify/suite"
 	"github.com/3Xpl0it3r/stupidmux/context"
 	"net/http"
@@ -20,6 +21,8 @@ func(suite *TestStupidMuxSuite)TestStupidMux1(){
 	mux := NewStupidMux()
 	v1 := mux.Group("/v1")
 	v2 := mux.Group("/v2")
+
+	v1.Use(middeware.LogMiddleWare)
 
 	v1.GET("/", func(ctx *context.Context) {
 		ctx.String(http.StatusOK, "HelloWorld")

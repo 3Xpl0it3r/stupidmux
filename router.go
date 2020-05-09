@@ -47,6 +47,7 @@ func(r *router)getRouter(method,path string)(*node, context.Params){
 }
 
 func(r *router)handle(ctx *context.Context){
+	ctx.Next()
 	n,params := r.getRouter(ctx.Method, ctx.Path)
 	if n != nil {
 		if handle,ok := r.handlers[routerKey(ctx.Method, n.pattern)];ok {
@@ -56,9 +57,7 @@ func(r *router)handle(ctx *context.Context){
 	} else {
 		ctx.String(http.StatusNotFound, "404 Not Found")
 	}
-	ctx.Next()
 }
-
 
 
 func parsePath(path string)[]string{

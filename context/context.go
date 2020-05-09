@@ -32,6 +32,7 @@ func NewContext(w http.ResponseWriter,r *http.Request)*Context {
 		Path: r.URL.Path,
 		Method: r.Method,
 		index: -1,
+		MiddleWares: make([]StupidHandler,0),
 	}
 }
 
